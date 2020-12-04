@@ -3,8 +3,8 @@ import { Text, View, ScrollView, FlatList, Modal, Button, StyleSheet } from 'rea
 import { Card, Icon, Rating, Input } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
-import { postFavorite } from '../redux/ActionCreators';
-import { postComment } from '../redux/ActionCreators'
+import { postFavorite, postComment } from '../redux/ActionCreators';
+import { p } from '../redux/ActionCreators'
 
 const mapStateToProps = state => {
     return {
@@ -15,8 +15,8 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-    postFavorite: campsiteId => (postFavorite(campsiteId)),
-    postComment: (campsiteId, rating, author, text) => (postComment(campsiteId, rating, author, text))
+    postFavorite: campsiteId => postFavorite(campsiteId),
+    postComment: (campsiteId, rating, author, text) => postComment(campsiteId, rating, author, text)
 };
 
 function RenderCampsite(props) {
@@ -62,7 +62,7 @@ function RenderComment({comments}) {
         return (
             <View style={{margin: 10}}>
                 <Text style={{fontSize: 14}}>{item.text}</Text>
-                <Rating readonly startingValue={item.rating} imageSize={10} style={{alignItems:'flex-start', paddingVertical:'5%'}}>{item.rating}</Rating>
+                <Rating readonly startingValue={item.rating} imageSize={10} style={{alignItems:'flex-start', paddingVertical:'5%'}}/>
                 <Text style={{fontSize: 12}}>{`--${item.author}, ${item.date}`}</Text>
             </View>
         )
@@ -84,7 +84,7 @@ class CampsiteInfo extends Component {
         super(props)
     
         this.state = {
-            ratings: 5,
+            rating: 5,
             author: '',
             text: '',
             showModal: false
@@ -95,14 +95,20 @@ class CampsiteInfo extends Component {
         this.setState({showModal: !this.state.showModal});
     }
 
+    // handleComment(campsiteId, author, text, rating) {
+    //     this.postComment(campsiteId, author, text, rating);
+    //     this.toggleModal(campsiteId);
+    // }
+
     handleComment(campsiteId) {
-        this.postComment(campsiteId, errMess, comments, comment);
-        this.toggleModal(campsiteId);
+        this.props.postComment(campsiteId, this.state.rating, this.state.author, this.state.text);
+        this.toggleModal();
     }
+
 
     resetForm() {
         this.setState({
-            ratings: 5,
+            rating: 5,
             author: '',
             text: '',
             showModal: false
@@ -135,7 +141,7 @@ class CampsiteInfo extends Component {
                     visible={this.state.showModal}
                     onRequestClose={() => this.toggleModal()}
                 >
-                    <View style={styles.Modal}>
+                    <View style={styles.modal}>
                         <Rating 
                             showRating
                             imageSize={40}
@@ -148,17 +154,19 @@ class CampsiteInfo extends Component {
                             leftIcon={{ type: 'font-awesome', name: 'user-o' }}
                             leftIconContainerStyle={{paddingRight: 10}}
                             onChangeText={value => this.setState({author: value})}
+                            value={this.state.author}
                         />
                         <Input 
                             placeholder='Comments'
                             leftIcon={{ type: 'font-awesome', name: 'comment-o' }}
                             leftIconContainerStyle={{paddingRight: 10}}
-                            onChangeText={value => this.setState({comment: value})}
+                            onChangeText={value => this.setState({text: value})}
+                            value={this.state.text}
                         />
                         <View style={{margin:10}}>
                             <Button 
                             onPress={() => {
-                                this.handleComment();
+                                this.handleComment(campsiteId);
                                 this.resetForm();
                             }}
                             color='#5637DD'
