@@ -4,7 +4,6 @@ import { Card, Icon, Rating, Input } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
 import { postFavorite, postComment } from '../redux/ActionCreators';
-import { p } from '../redux/ActionCreators'
 
 const mapStateToProps = state => {
     return {
