@@ -7,6 +7,7 @@ import { baseUrl } from '../shared/baseUrl';
 import { SwipeRow } from 'react-native-swipe-list-view';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { deleteFavorite } from '../redux/ActionCreators';
+import * as Animatable from 'react-native-animatable';
 
 const mapStateToProps = state => {
     return {
@@ -20,20 +21,20 @@ const mapDispatchToProps = {
 }
 
 export class Favorites extends Component {
-    
+
     static navigationOptions = {
         title: 'My Favorites'
     }
-    
+
     render() {
         const { navigate } = this.props.navigation;
-        const renderFavoriteItem = ({item}) => {
+        const renderFavoriteItem = ({ item }) => {
             return (
                 <SwipeRow rightOpenValue={-100} style={styles.swipeRow}>
                     <View style={styles.deleteView}>
                         <TouchableOpacity
                             style={styles.deleteTouchable}
-                            onPress={() => 
+                            onPress={() =>
                                 Alert.alert(
                                     'Delete Favorite?',
                                     'Are you sure you wish to delete the favorite campsite' +
@@ -59,10 +60,10 @@ export class Favorites extends Component {
                     </View>
                     <View>
                         <ListItem
-                        title={item.name}
-                        subtitle={item.description}
-                        leftAvatar={{source: {uri: baseUrl + item.image}}}
-                        onPress={() => navigate('CampsiteInfo', {campsiteId: item.id})}
+                            title={item.name}
+                            subtitle={item.description}
+                            leftAvatar={{ source: { uri: baseUrl + item.image } }}
+                            onPress={() => navigate('CampsiteInfo', { campsiteId: item.id })}
                         />
                     </View>
                 </SwipeRow>
@@ -80,19 +81,16 @@ export class Favorites extends Component {
             )
         }
         return (
-            <FlatList
-                data={this.props.campsites.campsites.filter(
-                    campsite => this.props.favorites.includes(campsite.id)
-                )}
-                renderItem={renderFavoriteItem}
-                keyExtractor={item=>item.id.toString()}
+            <Animatable.View animation='fadeInRightBig' duration={2000}>
+                <FlatList
+                    data={this.props.campsites.campsites.filter(
+                        campsite => this.props.favorites.includes(campsite.id)
+                    )}
+                    renderItem={renderFavoriteItem}
+                    keyExtractor={item => item.id.toString()}
                 />
+            </Animatable.View>
         );
-        return (
-            <div>
-                
-            </div>
-        )
     }
 }
 
