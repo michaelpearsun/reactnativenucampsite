@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Text, View, ScrollView, StyleSheet, Picker, Switch, Button, Alert} from 'react-native';
+import { Text, View, ScrollView, StyleSheet, Switch, Button, Alert, Picker } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import * as Animatable from 'react-native-animatable';
+//import { Picker } from '@react-native-picker/picker';
 
 export class Reservation extends Component {
 
@@ -28,7 +29,7 @@ export class Reservation extends Component {
             'Number of Campers' +
             this.state.campers + 
             '\n\nHike-In? ' + this.state.hikein + 
-            '\n\nDate ' + this.state.date,
+            '\n\nDate ' + this.state.date.toLocaleDateString('en-US'),
             [
                 {
                     text: 'Cancel',
@@ -70,12 +71,12 @@ export class Reservation extends Component {
                             selectedValue={this.state.campers}
                             onValueChange={itemValue => this.setState({ campers: itemValue })}
                         >
-                            <Picker.item label='1' value='1' />
-                            <Picker.item label='2' value='2' />
-                            <Picker.item label='3' value='3' />
-                            <Picker.item label='4' value='4' />
-                            <Picker.item label='5' value='5' />
-                            <Picker.item label='6' value='6' />
+                            <Picker.Item label='1' value='1' />
+                            <Picker.Item label='2' value='2' />
+                            <Picker.Item label='3' value='3' />
+                            <Picker.Item label='4' value='4' />
+                            <Picker.Item label='5' value='5' />
+                            <Picker.Item label='6' value='6' />
                         </Picker>
                     </View>
                     <View style={styles.formRow}>
@@ -117,33 +118,6 @@ export class Reservation extends Component {
                             accessibilityLabel='Tap me to search for available campsites to reserve'
                         />
                     </View>
-                    {/* <Modal
-                        animationType={'slide'}
-                        transparent={false}
-                        visible={this.state.showModal}
-                        onRequestClose={() => this.toggleModal()}
-                    >
-                        <View style={styles.modal}>
-                            <Text style={styles.modalTitle}>Search Campsite Reservations</Text>
-                            <Text style={styles.modalText}>
-                                Number of Campers: {this.state.campers}
-                            </Text>
-                            <Text style={styles.modalText}>
-                                Hike-in?: {this.state.hikein ? 'Yes' : 'No'}
-                            </Text>
-                            <Text style={styles.modalText}>
-                                Date: {this.state.date.toLocaleDateString('en-US')}
-                            </Text>
-                            <Button
-                                onPress={() => {
-                                    this.toggleModal();
-                                    this.resetForm();
-                                }}
-                                color='#5367DD'
-                                title='Close'
-                            />
-                        </View>
-                    </Modal> */}
                 </Animatable.View>
             </ScrollView>
         )
